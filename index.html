@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formula Calculator</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>📐 Dynamic Formula Calculator</h1>
+    <nav>
+      <ul>
+        <li><a href="#square">Square Area</a></li>
+        <li><a href="#triangle">Triangle Area</a></li>
+        <li><a href="#circle">Circle Area</a></li>
+        <li><a href="#rsi">RSI Signal</a></li>
+        <li><a href="#gravity">Gravitational Force</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Square Area -->
+    <section id="square">
+      <h2>Square Area</h2>
+      {% if square_result %}<p class="result">{{ square_result }}</p>{% endif %}
+      <form method="POST">
+        <input type="hidden" name="calc_type" value="square">
+        <input type="number" name="length" placeholder="Length" required>
+        <input type="number" name="width" placeholder="Width" required>
+        <button type="submit">Calculate</button>
+        <button type="submit" name="reset" value="square">Reset</button>
+      </form>
+    </section>
+
+    <!-- Triangle Area -->
+    <section id="triangle">
+      <h2>Triangle Area</h2>
+      {% if triangle_result %}<p class="result">{{ triangle_result }}</p>{% endif %}
+      <form method="POST">
+        <input type="hidden" name="calc_type" value="triangle">
+        <input type="number" name="base" placeholder="Base" required>
+        <input type="number" name="height" placeholder="Height" required>
+        <button type="submit">Calculate</button>
+        <button type="submit" name="reset" value="triangle">Reset</button>
+      </form>
+    </section>
+
+    <!-- Circle Area -->
+    <section id="circle">
+      <h2>Circle Area</h2>
+      {% if circle_result %}<p class="result">{{ circle_result }}</p>{% endif %}
+      <form method="POST">
+        <input type="hidden" name="calc_type" value="circle">
+        <input type="number" name="radius" placeholder="Radius" required>
+        <button type="submit">Calculate</button>
+        <button type="submit" name="reset" value="circle">Reset</button>
+      </form>
+    </section>
+
+    <!-- RSI Signal -->
+    <section id="rsi">
+      <h2>RSI Signal</h2>
+      {% if rsi_result %}<p class="result">{{ rsi_result }}</p>{% endif %}
+      <form method="POST">
+        <input type="hidden" name="calc_type" value="rsi">
+        <input type="number" name="rsi" placeholder="RSI Value" required>
+        <button type="submit">Evaluate</button>
+        <button type="submit" name="reset" value="rsi">Reset</button>
+      </form>
+    </section>
+
+    <!-- Gravitational Force -->
+    <section id="gravity">
+      <h2>Gravitational Force</h2>
+      {% if gravity_result %}<p class="result">{{ gravity_result }}</p>{% endif %}
+      <form method="POST">
+        <input type="hidden" name="calc_type" value="gravity">
+        <input type="number" name="mass1" placeholder="Mass 1 (kg)" required>
+        <input type="number" name="mass2" placeholder="Mass 2 (kg)" required>
+        <input type="number" name="distance" placeholder="Distance (m)" required>
+        <button type="submit">Calculate</button>
+        <button type="submit" name="reset" value="gravity">Reset</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
