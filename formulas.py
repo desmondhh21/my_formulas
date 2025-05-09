@@ -1,30 +1,87 @@
+from flask import Flask, render_template, request
 
-#Prints area of a square
+app = Flask(__name__)
+
+# Formula functions
 def square_area(length, width):
     return length * width
-print("The area of this square is:", square_area(4,84))
 
-#Prints area of a triangle
 def triangle_area(base, height):
-    return (base * height) /2
-print("The area of this triangle is:", triangle_area(4,8))
+    return (base * height) / 2
 
-#Prints area of a circle
-def circle_area(radius, pi = 3.141592653589793):
+def circle_area(radius, pi=3.141592653589793):
     return pi * (radius ** 2)
-print("The area of this circle is:", circle_area(55))
 
-#Prints if you should go into a stock trade based on it's RSI
 def rsi_signal(rsi):
     if rsi < 5 or rsi > 95:
-        print("Pull the trigger!", "RSI is", rsi)
+        return f"Pull the trigger! RSI is {rsi}"
     else:
-        print("Don't pull the trigger yet!", "RSI is", rsi)
+        return f"Don't pull the trigger yet! RSI is {rsi}"
 
-rsi_signal(54)
+def gravitational_force(m1, m2, distance, gconstant=6.677430e-11):
+    return gconstant * (m1 * m2) / (distance ** 2)
 
-#Prints the graviational focre of two object inputs
-def gravitational_force(m1, m2, distance, gconstant = 6.677430 * 10**-11):
-    return gconstant * (m1 * m2) / distance ** 2
-print("The gravitational force for these two obnjects is:", gravitational_force(24, 5, 5))
+@app.route("/", methods=["GET", "POST"])
+def index():
+    square_result = triangle_result = circle_result = rsi_result = gravity_result = None
 
+    if request.method == "POST":
+        calc_type = request.form.get("calc_type")
+        reset_type = request.form.get("reset")
+
+        if reset_type == calc_type:
+            # Reset requested: clear only that result
+            return render_template("index.html",
+                                   square_result=None,
+                                   triangle_result=None,
+                                   circle_result=None,
+                                   rsi_result=None,
+                                   gravity_result=None)
+
+        try:
+            if calc_type == "square":
+                l = float(request.form["length"])
+                w = float(request.form["width"])
+                square_result = f"Square Area: {square_area(l, w)}"
+
+            elif calc_type == "triangle":
+                b = float(request.form["base"])
+                h = float(request.form["height"])
+                triangle_result = f"Triangle Area: {triangle_area(b, h)}"
+
+            elif calc_type == "circle":
+                r = float(request.form["radius"])
+                circle_result = f"Circle Area: {circle_area(r):.2f}"
+
+            elif calc_type == "rsi":
+                rsi = float(request.form["rsi"])
+                rsi_result = rsi_signal(rsi)
+
+            elif calc_type == "gravity":
+                m1 = float(request.form["mass1"])
+                m2 = float(request.form["mass2"])
+                d = float(request.form["distance"])
+                force = gravitational_force(m1, m2, d)
+                gravity_result = f"Gravitational Force: {force:.3e} N"
+
+        except (ValueError, KeyError):
+            if calc_type == "square":
+                square_result = "Invalid input."
+            elif calc_type == "triangle":
+                triangle_result = "Invalid input."
+            elif calc_type == "circle":
+                circle_result = "Invalid input."
+            elif calc_type == "rsi":
+                rsi_result = "Invalid input."
+            elif calc_type == "gravity":
+                gravity_result = "Invalid input."
+
+    return render_template("index.html",
+                           square_result=square_result,
+                           triangle_result=triangle_result,
+                           circle_result=circle_result,
+                           rsi_result=rsi_result,
+                           gravity_result=gravity_result)
+
+if __name__ == "__main__":
+    app.run(debug=True)
